@@ -21,4 +21,14 @@ class Controller extends BaseController
             'message' => $message,
         ], $statusCode);
     }
+
+
+    public function error(string $message = "okay", int $statusCode = 200): JsonResponse
+    {
+        return response()->json([
+            'data' => null,
+            'success' => false,
+            'message' => $message,
+        ], $statusCode);
+    }
 }

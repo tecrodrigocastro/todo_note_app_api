@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\GetNotesRequest;
+use App\Models\Note;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class NoteController extends Controller
@@ -11,9 +14,20 @@ class NoteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(GetNotesRequest $request): JsonResponse
     {
-        //
+        $data = $request->validated();
+        $currentPage = $data['page'];
+        $pageSize = $data['page_size'] ?? 15;
+
+        $notes = Note::orderBy('id', 'desc')->simplePaginate(
+            $pageSize,
+            ['*'],
+            'page',
+            $currentPage
+        );
+
+        return $this->success($notes->getCollection());
     }
 
     /**
