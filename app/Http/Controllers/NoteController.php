@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\GetNotesRequest;
+use App\Http\Requests\StoreNoteRequest;
 use App\Models\Note;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Mockery\Matcher\Not;
 
 class NoteController extends Controller
 {
@@ -36,9 +38,11 @@ class NoteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreNoteRequest $request): JsonResponse
     {
-        //
+        $note = Note::create($request->validated());
+
+        return $this->success($note, 'Note has been created successfully!');
     }
 
     /**
