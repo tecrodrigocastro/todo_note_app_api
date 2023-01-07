@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\GetNotesRequest;
 use App\Http\Requests\StoreNoteRequest;
+use App\Http\Requests\UpdateNoteRequest;
 use App\Models\Note;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -51,9 +52,9 @@ class NoteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Note $note): JsonResponse
     {
-        //
+        return $this->success($note);
     }
 
     /**
@@ -63,9 +64,11 @@ class NoteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateNoteRequest $request, Note $note): JsonResponse
     {
-        //
+        $note->update($request->validated());
+
+        return $this->success($note->refresh(), "Note has been updated successfully!");
     }
 
     /**
@@ -74,8 +77,10 @@ class NoteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Note $note): JsonResponse
     {
-        //
+        $note->delete();
+
+        return $this->success($note->id, "Note has been deleted successfully!");
     }
 }
